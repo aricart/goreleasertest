@@ -1,0 +1,38 @@
+project_name: mytool
+release:
+  github:
+    owner: aricart
+    name: goreleasertest
+  name_template: '{{.Tag}}'
+  draft: true
+builds:
+- id: mytool
+  main: ./mytool/main.go
+  ldflags: "-X main.version={{.Tag}}"
+  env:
+    - CGO_ENABLED=0
+  binary: mytool
+  goos:
+  - darwin
+  - linux
+  - windows
+  goarch:
+  - amd64
+
+dist: build
+
+archives:
+  - id: "mytool.zip"
+    wrap_in_directory: false
+    name_template: '{{ .ProjectName }}-{{ .Os }}-{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}'
+    format: zip
+    files:
+      - none*
+
+checksum:
+  name_template: '{{ .ProjectName }}-checksums.txt'
+
+snapshot:
+  name_template: 'dev'
+
+
